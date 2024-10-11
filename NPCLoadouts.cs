@@ -1,4 +1,4 @@
-﻿using Facepunch;
+using Facepunch;
 using Newtonsoft.Json;
 using System;
 using System.Collections;
