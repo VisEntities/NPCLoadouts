@@ -1,9 +1,9 @@
-﻿using System;
+﻿using Facepunch;
+using Newtonsoft.Json;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Newtonsoft.Json;
-using Oxide.Core;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -14,7 +14,7 @@ using Random = UnityEngine.Random;
 
 namespace Oxide.Plugins
 {
-    [Info("NPC Loadouts", "VisEntities", "2.0.0")]
+    [Info("NPC Loadouts", "VisEntities", "2.0.1")]
     [Description("Equip npcs with custom loadouts.")]
     public class NPCLoadouts : RustPlugin
     {
@@ -349,16 +349,19 @@ namespace Oxide.Plugins
             }
         }
 
-        public static void StripInventory(NPCPlayer npc)
+        public static void StripInventory(BasePlayer player)
         {
-            Item[] allItems = npc.inventory.AllItems();
+            List<Item> allItems = Pool.Get<List<Item>>();
+            player.inventory.GetAllItems(allItems);
 
-            for (int i = allItems.Length - 1; i >= 0; i--)
+            for (int i = allItems.Count - 1; i >= 0; i--)
             {
                 Item item = allItems[i];
                 item.RemoveFromContainer();
                 item.Remove();
             }
+
+            Pool.FreeUnmanaged(ref allItems);
         }
 
         #endregion Functions
